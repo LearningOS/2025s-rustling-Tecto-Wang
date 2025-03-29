@@ -6,7 +6,21 @@
 // I AM NOT DONE
 
 fn sort<T>(array: &mut [T]){
-	//TODO
+    let n = array.len();
+    // 冒泡排序：每一趟比较相邻元素，将较大的元素交换到后面
+    for i in 0..n {
+        // 提前退出标志：如果本趟没有发生交换，则数组已经有序
+        let mut swapped = false;
+        for j in 0..n - i - 1 {
+            if array[j] > array[j + 1] {
+                array.swap(j, j + 1);
+                swapped = true;
+            }
+        }
+        if !swapped {
+            break;
+        }
+    }
 }
 #[cfg(test)]
 mod tests {
