@@ -69,15 +69,77 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self where
+        T: Ord,
+    {
+        let mut result = LinkedList::new();
+        let mut a = list_a.start;
+        let mut b = list_b.start;
+
+        while a.is_some() && b.is_some() {
+            // 比较两个节点的值
+            let node_ptr;
+            unsafe {
+                if (*a.unwrap().as_ptr()).val <= (*b.unwrap().as_ptr()).val {
+                    node_ptr = a;
+                    // 更新 a 指向下一个节点
+                    a = (*a.unwrap().as_ptr()).next;
+                } else {
+                    node_ptr = b;
+                    // 更新 b 指向下一个节点
+                    b = (*b.unwrap().as_ptr()).next;
+                }
+                // 断开当前节点与原链表的连接
+                (*node_ptr.unwrap().as_ptr()).next = None;
+            }
+            // 将选中的节点追加到结果链表中
+            if result.start.is_none() {
+                result.start = node_ptr;
+                result.end = node_ptr;
+            } else {
+                unsafe {
+                    (*result.end.unwrap().as_ptr()).next = node_ptr;
+                }
+                result.end = node_ptr;
+            }
+            result.length += 1;
         }
-	}
+
+        // 处理剩余的节点（如果有）
+        while let Some(node) = a {
+            unsafe {
+                a = (*node.as_ptr()).next;
+                (*node.as_ptr()).next = None;
+            }
+            if result.start.is_none() {
+                result.start = Some(node);
+                result.end = Some(node);
+            } else {
+                unsafe {
+                    (*result.end.unwrap().as_ptr()).next = Some(node);
+                }
+                result.end = Some(node);
+            }
+            result.length += 1;
+        }
+        while let Some(node) = b {
+            unsafe {
+                b = (*node.as_ptr()).next;
+                (*node.as_ptr()).next = None;
+            }
+            if result.start.is_none() {
+                result.start = Some(node);
+                result.end = Some(node);
+            } else {
+                unsafe {
+                    (*result.end.unwrap().as_ptr()).next = Some(node);
+                }
+                result.end = Some(node);
+            }
+            result.length += 1;
+        }
+        result
+    }
 }
 
 impl<T> Display for LinkedList<T>
