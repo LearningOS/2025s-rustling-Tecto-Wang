@@ -5,23 +5,19 @@
 */
 // I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
+fn sort<T>(array: &mut [T]) where
+    T: PartialOrd,
+{
     let n = array.len();
-    // 冒泡排序：每一趟比较相邻元素，将较大的元素交换到后面
-    for i in 0..n {
-        // 提前退出标志：如果本趟没有发生交换，则数组已经有序
-        let mut swapped = false;
-        for j in 0..n - i - 1 {
-            if array[j] > array[j + 1] {
-                array.swap(j, j + 1);
-                swapped = true;
+    for i in (0..=n).rev() {
+        for j in 1..n {
+            if array[j - 1] > array[j] {
+                array.swap(j - 1, j)
             }
-        }
-        if !swapped {
-            break;
         }
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
