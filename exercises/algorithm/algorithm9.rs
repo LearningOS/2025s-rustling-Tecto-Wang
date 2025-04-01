@@ -9,7 +9,7 @@ use std::default::Default;
 
 pub struct Heap<T>
 where
-    T: Default,
+    T: Default + Ord,
 {
     count: usize,
     items: Vec<T>,
@@ -18,12 +18,12 @@ where
 
 impl<T> Heap<T>
 where
-    T: Default,
+    T: Default + Ord,
 {
     pub fn new(comparator: fn(&T, &T) -> bool) -> Self {
         Self {
             count: 0,
-            items: vec![T::default()],
+            items: vec![T::default()], // 索引从 1 开始
             comparator,
         }
     }
@@ -37,7 +37,37 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.items.push(value);
+        self.count += 1;
+        self.upheap(self.count);
+    }
+
+    fn upheap(&mut self, mut idx: usize) {
+        while idx > 1 && (self.comparator)(&self.items[idx], &self.items[self.parent_idx(idx)]) {
+            self.items.swap(idx, self.parent_idx(idx));
+            idx = self.parent_idx(idx);
+        }
+    }
+
+    pub fn pop(&mut self) -> Option<T> {
+        if self.is_empty() {
+            return None;
+        }
+        let result = self.items.swap_remove(1);
+        self.count -= 1;
+        self.downheap(1);
+        Some(result)
+    }
+
+    fn downheap(&mut self, mut idx: usize) {
+        while self.children_present(idx) {
+            let smallest_child = self.smallest_child_idx(idx);
+            if !(self.comparator)(&self.items[smallest_child], &self.items[idx]) {
+                break;
+            }
+            self.items.swap(idx, smallest_child);
+            idx = smallest_child;
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -57,8 +87,17 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        let left = self.left_child_idx(idx);
+        let right = self.right_child_idx(idx);
+        if left > self.count {
+            idx
+        } else if right > self.count {
+            left
+        } else if (self.comparator)(&self.items[left], &self.items[right]) {
+            left
+        } else {
+            right
+        }
     }
 }
 
@@ -79,13 +118,12 @@ where
 
 impl<T> Iterator for Heap<T>
 where
-    T: Default,
+    T: Default + Ord,
 {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        self.pop()
     }
 }
 
