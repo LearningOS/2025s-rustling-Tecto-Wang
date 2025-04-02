@@ -17,14 +17,15 @@ fn string(arg: String) {
 }
 
 fn main() {
-    ???("blue");
-    ???("red".to_string());
-    ???(String::from("hi"));
-    ???("rust is fun!".to_owned());
-    ???("nice weather".into());
-    ???(format!("Interpolation {}", "Station"));
-    ???(&String::from("abc")[0..1]);
-    ???("  hello there ".trim());
-    ???("Happy Monday!".to_string().replace("Mon", "Tues"));
-    ???("mY sHiFt KeY iS sTiCkY".to_lowercase());
+    println!("blue");
+    string("red".to_string()); // Calls `string` with `String`
+    string(String::from("hi")); // Calls `string` with `String`
+    string("rust is fun!".to_owned()); // Calls `string` with `String`
+    string("nice weather".into()); // Calls `string` with `String`
+    string(format!("Interpolation {}", "Station")); // Calls `string` with `String`
+
+    string_slice(&String::from("abc")[0..1]); // Calls `string_slice` with `&str`
+    string_slice("  hello there ".trim()); // Calls `string_slice` with `&str`
+    string_slice("Happy Monday!".to_string().replace("Mon", "Tues")); // Calls `string_slice` with `&str`
+    string_slice("mY sHiFt KeY iS sTiCkY".to_lowercase()); // Calls `string_slice` with `&str`
 }
