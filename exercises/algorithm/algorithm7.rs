@@ -113,7 +113,7 @@ fn bracket_match(bracket: &str) -> bool
 			')' => if stack.pop() != Some('(') { return false; },
 			'}' => if stack.pop() != Some('{') { return false; },
 			']' => if stack.pop() != Some('[') { return false; },
-			_ => return false,
+			_ => continue,
 		}
 	}
 

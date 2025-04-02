@@ -43,9 +43,17 @@ where
     }
 
     fn upheap(&mut self, mut idx: usize) {
-        while idx > 1 && (self.comparator)(&self.items[idx], &self.items[self.parent_idx(idx)]) {
-            self.items.swap(idx, self.parent_idx(idx));
-            idx = self.parent_idx(idx);
+        while idx > 1 {
+            let parent_idx = self.parent_idx(idx);
+            // 提前取出 items[idx] 和 items[parent_idx]，避免直接借用 self
+            let should_swap = (self.comparator)(&self.items[idx], &self.items[parent_idx]);
+
+            if !should_swap {
+                break;
+            }
+
+            self.items.swap(idx, parent_idx);
+            idx = parent_idx;
         }
     }
 
