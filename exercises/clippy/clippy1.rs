@@ -9,7 +9,6 @@
 // Execute `rustlings hint clippy1` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 use std::f32::consts::PI;  // 引入标准库中的 π
 
