@@ -25,6 +25,6 @@ fn main() {
 
     string_slice(&String::from("abc")[0..1]); // Calls `string_slice` with `&str`
     string_slice("  hello there ".trim()); // Calls `string_slice` with `&str`
-    string_slice("Happy Monday!".to_string().replace("Mon", "Tues")); // Calls `string_slice` with `&str`
-    string_slice("mY sHiFt KeY iS sTiCkY".to_lowercase()); // Calls `string_slice` with `&str`
+    string("Happy Monday!".to_string().replace("Mon", "Tues")); // Calls `string_slice` with `&str`
+    string("mY sHiFt KeY iS sTiCkY".to_lowercase()); // Calls `string_slice` with `&str`
 }
